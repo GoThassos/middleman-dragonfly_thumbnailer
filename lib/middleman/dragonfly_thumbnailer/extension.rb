@@ -37,6 +37,18 @@ module Middleman
         images << image
         image
       end
+      
+      def image_url(path, geometry)
+        image = extensions[:dragonfly_thumbnailer].thumb(path, geometry)
+          return unless image
+
+        if environment == :development
+          url = image.b64_data
+        else
+          url = extensions[:dragonfly_thumbnailer].build_path(image)
+        end
+        url
+      end
 
       def after_build(builder)
         images.each do |image|
@@ -47,15 +59,11 @@ module Middleman
       end
 
       helpers do
+        def thumb_url(path, geometry)
+          image_url(path, geometry)
+        end
         def thumb_tag(path, geometry, options = {})
-          image = extensions[:dragonfly_thumbnailer].thumb(path, geometry)
-          return unless image
-
-          if environment == :development
-            url = image.b64_data
-          else
-            url = extensions[:dragonfly_thumbnailer].build_path(image)
-          end
+          url = image_url(path, geometry)
 
           image_tag(url, options)
         end
