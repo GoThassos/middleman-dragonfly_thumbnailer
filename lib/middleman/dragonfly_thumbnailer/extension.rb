@@ -60,7 +60,7 @@ module Middleman
           image_url(path, geometry)
         end
         def thumb_tag(path, geometry, options = {})
-          url = image_url(path, geometry)
+          url = thumb_url(path, geometry)
 
           image_tag(url, options)
         end
