@@ -42,7 +42,7 @@ module Middleman
         image = thumb(path, geometry)
           return unless image
 
-        if environment == :development
+        if app.config[:environment] == :development
           url = image.b64_data
         else
           url = build_path(image)
