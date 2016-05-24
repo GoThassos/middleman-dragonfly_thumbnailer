@@ -3,11 +3,9 @@ require 'dragonfly'
 module Middleman
   module DragonflyThumbnailer
     class Extension < Middleman::Extension
-      attr_accessor :images
 
       def initialize(app, options_hash = {}, &block)
         super
-        @images = []
         configure_dragonfly
       end
 
@@ -34,7 +32,9 @@ module Middleman
         image.meta['original_path'] = path
         image.meta['geometry'] = geometry
         image = image.thumb(geometry)
-        images << image
+
+        persist_file(image) if app.build?
+
         image
       end
       
@@ -50,12 +50,9 @@ module Middleman
         url
       end
 
-      def after_build(builder)
-        images.each do |image|
-          builder.say_status :create, build_path(image)
-          path = absolute_build_path(image)
-          image.to_file(path).close
-        end
+      def persist_file(image)
+        path = absolute_build_path(image)
+        image.to_file(path).close
       end
 
       helpers do
