@@ -16,7 +16,7 @@ module Middleman
       def build_path(image)
         dir = File.dirname(image.meta['original_path'])
         subdir = image.meta['geometry'].gsub(/[^a-zA-Z0-9\-]/, '')
-        File.join(dir, subdir, image.name)
+        File.join("resized", dir, subdir, image.name)
       end
 
       def absolute_build_path(image)
