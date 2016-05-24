@@ -31,6 +31,7 @@ module Middleman
         image = ::Dragonfly.app.fetch_file(absolute_path)
         image.meta['original_path'] = path
         image.meta['geometry'] = geometry
+        image.convert!('-quality 82 -interpolate bicubic -strip -interlace none -filter Triangle -define filter:support=2 -unsharp 0.25x0.08+8.3+0.045 -colorspace sRGB -define jpeg:fancy-upsampling=off')
         image = image.thumb(geometry)
 
         persist_file(image) if app.build?
